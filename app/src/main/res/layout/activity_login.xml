@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:padding="30dp"
+    tools:context=".authentication.LoginActivity">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/ivLogin"
+        android:src="@drawable/login_weather"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvLogin"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/ivLogin"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#FFEBDE">
+
+        <TextView
+            android:id="@+id/tvLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/sans"
+            android:text="Welcome To Weather Tracker"
+            android:textColor="#d2601a"
+            android:textSize="20dp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <EditText
+        android:id="@+id/edtLogin"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/cvLogin"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edittext_border"
+        android:drawableLeft="@drawable/ic_login"
+        android:drawablePadding="10dp"
+        android:drawableTint="#d2601a"
+        android:fontFamily="@font/sans"
+
+        android:hint="Login"
+        android:paddingLeft="10dp"
+        android:textColor="#d2601a"
+        android:textColorHint="#9E9393"
+        android:textSize="20dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/edtPassword"
+        android:layout_below="@id/edtLogin"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edittext_border"
+        android:fontFamily="@font/sans"
+        android:hint="Password"
+        android:textColor="#d2601a"
+        android:inputType="numberPassword"
+        android:drawablePadding="10dp"
+        android:paddingLeft="10dp"
+        android:drawableLeft="@drawable/ic_password"
+        android:drawableTint="#d2601a"
+        android:textColorHint="#9E9393"
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        style="@style/Widget.Material3.Button.TonalButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvForgetPassword"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#FFEBDE"
+        android:text="Login"
+        app:rippleColor="@color/primary"
+        android:textColor="#d2601a"
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/btnRegister"
+        style="@style/Widget.Material3.Button.TonalButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvForgetPassword"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/btnLogin"
+        android:backgroundTint="#d2601a"
+        android:text="SignUp"
+        app:rippleColor="@color/secondary"
+        android:textColor="#FFEBDE"
+        android:textSize="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/sans"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/tvGithub"
+        android:text="https://github.com/arpitparekh"
+        android:textColor="#d2601a"/>
+
+    <TextView
+        android:id="@+id/tvForgetPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edtPassword"
+        android:layout_alignEnd="@id/edtPassword"
+        android:fontFamily="@font/sans"
+        android:textColor="#d2601a"
+        android:text="Forget Password ?"
+        android:layout_marginTop="10dp"/>
+
+</RelativeLayout>

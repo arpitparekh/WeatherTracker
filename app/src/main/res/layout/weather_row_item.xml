@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="obj1"
+            type="com.example.weathertracker.weather.Weather" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@color/secondary">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:id="@+id/tvName"
+                android:text="@{obj1.name}"
+                android:textColor="@color/primary"
+                android:fontFamily="@font/sans"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/tvTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvName"
+                android:layout_marginLeft="10dp"
+                android:text="@{String.valueOf(obj1.main.temp)+` \u2103`}"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/sans"
+                android:textSize="30dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvPressure"
+                android:layout_below="@id/tvTemp"
+                android:fontFamily="@font/sans"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="16dp"
+                android:text="@{`Pressure : `+obj1.main.pressure+` Pa`}"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvHumidity"
+                android:layout_below="@id/tvPressure"
+                android:fontFamily="@font/sans"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="16dp"
+                android:text="@{`Humidity : `+obj1.main.humidity+` g.kg-1`}"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationRefresh"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="true"
+                android:scaleType="centerCrop"
+                app:lottie_rawRes="@raw/loading" />
+
+            <ImageView
+                android:id="@+id/ivRefresh"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_refresh" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvWeather"
+                android:layout_below="@id/tvPressure"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:textSize="30dp"
+                android:textColor="@color/primary"
+                android:fontFamily="@font/sans"
+                android:text="@{obj1.weather.get(0).main}"/>
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

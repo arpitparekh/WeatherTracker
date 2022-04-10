@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:padding="30dp"
+    tools:context=".authentication.SignUpActivity">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_add" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvRegister"
+        android:layout_width="170dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/profile_image"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#FFEBDE">
+
+        <TextView
+            android:id="@+id/tvRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/sans"
+            android:text="Please Register"
+            android:textColor="#d2601a"
+            android:textSize="20dp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <EditText
+        android:id="@+id/edtName"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/cvRegister"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edittext_border"
+        android:drawableLeft="@drawable/ic_name"
+        android:drawablePadding="10dp"
+        android:drawableTint="#d2601a"
+        android:fontFamily="@font/sans"
+        android:hint="Name"
+        android:paddingLeft="10dp"
+        android:textColor="#d2601a"
+        android:textColorHint="#9E9393"
+        android:textSize="20dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/edtEmail"
+        android:layout_below="@id/edtName"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edittext_border"
+        android:fontFamily="@font/sans"
+        android:hint="Email"
+        android:textColor="#d2601a"
+        android:drawablePadding="10dp"
+        android:paddingLeft="10dp"
+        android:drawableLeft="@drawable/ic_login"
+        android:drawableTint="#d2601a"
+        android:textColorHint="#9E9393"
+        android:textSize="20dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/edtPassword"
+        android:inputType="numberPassword"
+        android:layout_below="@id/edtEmail"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edittext_border"
+        android:fontFamily="@font/sans"
+        android:hint="Password"
+        android:textColor="#d2601a"
+        android:drawablePadding="10dp"
+        android:paddingLeft="10dp"
+        android:drawableLeft="@drawable/ic_password"
+        android:drawableTint="#d2601a"
+        android:textColorHint="#9E9393"
+        android:textSize="20dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/edtRepeatPassword"
+        android:layout_below="@id/edtPassword"
+        android:inputType="numberPassword"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edittext_border"
+        android:fontFamily="@font/sans"
+        android:hint="Repeat Password"
+        android:textColor="#d2601a"
+        android:drawablePadding="10dp"
+        android:paddingLeft="10dp"
+        android:drawableLeft="@drawable/ic_password"
+        android:drawableTint="#d2601a"
+        android:textColorHint="#9E9393"
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/btnSignUp"
+        style="@style/Widget.Material3.Button.TonalButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edtRepeatPassword"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/primary"
+        android:fontFamily="@font/sans"
+        android:text="Register"
+        app:rippleColor="@color/secondary"
+        android:textColor="@color/secondary"
+        android:textSize="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/sans"
+        android:id="@+id/tvGithub"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:text="https://github.com/arpitparekh"
+        android:textColor="#d2601a"/>
+
+</RelativeLayout>
