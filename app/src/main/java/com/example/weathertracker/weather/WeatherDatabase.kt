@@ -7,22 +7,23 @@ class WeatherDatabase {
 
     companion object{
 
-        var api : WeatherApi? = null
+        var api : ApiCall? = null
 
-        fun getApiInstance() : WeatherApi?{
+        fun getInstance() : ApiCall? {
 
             if(api==null){
 
                 val retrofit = Retrofit.Builder()
-                    .baseUrl("https://community-open-weather-map.p.rapidapi.com/")
+                    .baseUrl("http://api.weatherapi.com/v1/")
                     .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+                    .build()
 
-                api = retrofit.create(WeatherApi::class.java)
-
+                api = retrofit.create(ApiCall::class.java)
             }
 
             return api
+
         }
+
     }
 }
