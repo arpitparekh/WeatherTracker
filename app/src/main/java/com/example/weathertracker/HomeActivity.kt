@@ -1,54 +1,98 @@
 package com.example.weathertracker
 
-import android.Manifest
+
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weathertracker.databinding.ActivityHomeBinding
 import com.example.weathertracker.weather.ApiCall
 import com.example.weathertracker.weather.Weather
 import com.example.weathertracker.weather.WeatherAdapter
 import com.example.weathertracker.weather.WeatherDatabase
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.tasks.Task
+import com.mapbox.geojson.Point
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.LocationPuck2D
+import com.mapbox.maps.plugin.animation.MapAnimationOptions
+import com.mapbox.maps.plugin.animation.camera
+import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.navigation.base.options.NavigationOptions
+import com.mapbox.navigation.core.MapboxNavigation
+import com.mapbox.navigation.core.trip.session.LocationMatcherResult
+import com.mapbox.navigation.core.trip.session.LocationObserver
+import com.mapbox.navigation.ui.maps.location.NavigationLocationProvider
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
-    GoogleMap.OnMyLocationButtonClickListener {
+
+class HomeActivity : AppCompatActivity(){
 
     lateinit var binding : ActivityHomeBinding
     lateinit var list : ArrayList<Weather>
     lateinit var api : ApiCall
-    lateinit var map : GoogleMap
     lateinit var adapter: WeatherAdapter
-    lateinit var currentLocation: Location
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    lateinit var enhancedLocation: Location
+    private lateinit var mapboxMap: MapboxMap
+    private val navigationLocationProvider = NavigationLocationProvider()
+    private lateinit var mapboxNavigation: MapboxNavigation
+
+    private val locationObserver = object : LocationObserver{
+        override fun onNewLocationMatcherResult(locationMatcherResult: LocationMatcherResult) {
+
+            enhancedLocation = locationMatcherResult.enhancedLocation
+
+            navigationLocationProvider.changePosition(enhancedLocation,locationMatcherResult.keyPoints)
+
+            updateCamera(enhancedLocation)
+
+
+
+        }
+
+        override fun onNewRawLocation(rawLocation: Location) {
+            makeApiCall(rawLocation.longitude, rawLocation.latitude)
+        }
+
+    }
+
+    private fun updateCamera(enhancedLocation: Location) {
+        val mapAnimationOptions = MapAnimationOptions.Builder().duration(500L).build()
+        binding.mapView.camera.easeTo(
+            CameraOptions.Builder()
+                .center(Point.fromLngLat(enhancedLocation.longitude, enhancedLocation.latitude))
+                .zoom(12.0)
+                .build(),
+            mapAnimationOptions
+        )
+
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mapboxMap = binding.mapView.getMapboxMap()
 
-        binding.animation.playAnimation()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        binding.mapView.location.apply {
 
-        fetchLocation()
+            setLocationProvider(navigationLocationProvider)
+
+//            locationPuck = LocationPuck2D(bearingImage = ContextCompat.getDrawable(
+//                this@HomeActivity, com.mapbox.navigation.R.drawable.mapbox_navigation_puck_icon
+//            ))
+            enabled = true;
+        }
 
         list = ArrayList()
 
@@ -56,47 +100,51 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
         binding.rvWeatherList.layoutManager = LinearLayoutManager(this)
 
+        adapter = WeatherAdapter(list)
+
+        binding.rvWeatherList.adapter =adapter
+
         api = WeatherDatabase.getInstance()!!
 
+        initialization()
 
     }
 
-    private fun fetchLocation() {
+    private fun initialization() {
 
-        if(ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
+        initStyle()
+        initNavigation()
 
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),101)
+    }
 
-            return
+    @SuppressLint("MissingPermission")
+    private fun initNavigation() {
 
-        }
-
-        val task : Task<Location> = fusedLocationProviderClient.lastLocation;
-        task.addOnSuccessListener {
-            if(it!=null){
-                currentLocation = it
-                val supportFragmentManager : SupportMapFragment = supportFragmentManager.findFragmentById(R.id.myMap) as SupportMapFragment
-                supportFragmentManager.getMapAsync(this)
-
-                makeApiCall(currentLocation.latitude,currentLocation.longitude)
+            mapboxNavigation = MapboxNavigation(
+                NavigationOptions.Builder(this)
+                    .accessToken(getString(R.string.mapbox_access_token))
+                    .build()
+            ).apply {
+                startTripSession()
+                registerLocationObserver(locationObserver)
             }
 
-        }
-
     }
 
-    private fun makeApiCall(latitude: Double, longitude: Double) {
+    private fun initStyle() {
+        mapboxMap.loadStyleUri(Style.MAPBOX_STREETS)
+    }
 
+    private fun makeApiCall(longitude: Double, latitude: Double) {
 
         val call = api.showWeather("$latitude,$longitude")
 
-        call.enqueue(object : Callback<Weather>{
+        call.enqueue(object : Callback<Weather> {
             override fun onResponse(call: Call<Weather>, response: Response<Weather>) {
                 list.clear()
                 val weather = response.body()
 
-                if(weather!=null){
+                if (weather != null) {
 
                     binding.animation.clearAnimation()
                     binding.animation.visibility = View.GONE
@@ -104,57 +152,47 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
                     list.add(weather)
 
-                    adapter = WeatherAdapter(list)
-
-                    binding.rvWeatherList.adapter =adapter
-
+                    adapter.notifyDataSetChanged()
                 }
             }
 
             override fun onFailure(call: Call<Weather>, t: Throwable) {
-                Log.i("dataError",t.toString())
+                Log.i("dataError", t.toString())
             }
-
         })
 
     }
 
-    @SuppressLint("MissingPermission")
-    override fun onMapReady(map: GoogleMap) {
-
-        this.map = map
-
-        val latLng = LatLng(currentLocation.latitude,currentLocation.longitude)
-
-
-
-        map.isMyLocationEnabled = true
-        map.uiSettings.isMyLocationButtonEnabled = true;
-        val markerOption = MarkerOptions().position(latLng)
-        map.animateCamera(CameraUpdateFactory.newLatLng(latLng))
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10.0f))
-        map.addMarker(markerOption)
-
-        map.setOnMyLocationButtonClickListener(this)
+    override fun onRestart() {
+        super.onRestart()
 
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode==101){
-            if(grantResults.isNotEmpty() && grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                fetchLocation()
-            }
-        }
+
+    @SuppressLint("Lifecycle")
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
     }
 
-    override fun onMyLocationButtonClick(): Boolean {
-        fetchLocation()
-        onMapReady(map)
-        return true
+    @SuppressLint("Lifecycle")
+    override fun onStop() {
+        super.onStop()
+        binding.mapView.onStop()
+    }
+
+    @SuppressLint("Lifecycle")
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapView.onLowMemory()
+    }
+
+    @SuppressLint("Lifecycle")
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.mapView.onDestroy()
+        mapboxNavigation.onDestroy()
+//        mapboxNavigation.stopTripSession()
+//        mapboxNavigation.unregisterLocationObserver(locationObserver)
     }
 }

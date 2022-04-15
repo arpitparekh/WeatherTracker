@@ -1,9 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdk 32
@@ -30,9 +28,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
     }
     buildFeatures{
 
@@ -62,8 +57,8 @@ dependencies {
     //lottie
     implementation "com.airbnb.android:lottie:3.4.0"
 
-    //google map
-    implementation 'com.google.android.gms:play-services-maps:18.0.2'
-    implementation 'com.google.android.gms:play-services-location:19.0.1'
+    //mapbox
+    implementation "com.mapbox.navigation:android:2.3.0"
+    implementation 'com.mapbox.maps:android:10.4.0'
 
 }
