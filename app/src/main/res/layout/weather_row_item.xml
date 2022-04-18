@@ -12,124 +12,173 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardUseCompatPadding="true"
+        android:backgroundTint="#FFF3EC"
+        android:id="@+id/cvOne"
         app:cardCornerRadius="20dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:background="@color/secondary"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_toLeftOf="@id/cvTemp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/sans"
-                android:text="@{obj.location.name}"
-                android:textColor="@color/primary"
-                android:textSize="30dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_toLeftOf="@id/cvTemp"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@id/tvName"
-                android:textColor="@color/primary"
-                android:fontFamily="@font/sans"
-                android:id="@+id/tvRegion"
-                android:text="@{obj.location.region+` / `+obj.location.country}"/>
-
-           <androidx.cardview.widget.CardView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_alignParentRight="true"
-               android:layout_marginRight="10dp"
-               android:backgroundTint="#FFD9C0"
-               android:id="@+id/cvTemp"
-               android:layout_marginTop="22dp"
-               app:cardCornerRadius="10dp">
-
-               <TextView
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:id="@+id/tvTemp"
-                   android:textSize="25dp"
-                   android:layout_margin="10dp"
-                   android:textColor="@color/primary"
-                   android:fontFamily="@font/sans"
-                   android:text="@{String.valueOf(obj.current.tempC)+`\u2103`}"/>
-
-           </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_below="@id/tvRegion"
-                android:id="@+id/cvWind"
-                android:layout_margin="10dp"
-                app:cardCornerRadius="10dp"
-                android:layout_height="wrap_content">
+                android:background="@color/secondary"
+                android:layout_height="match_parent">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#D5F2FF">
-
-                    <TextView
-                        android:id="@+id/tvWindSpeed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/sans"
-                        android:text="@{`Wind Speed is `+String.valueOf(obj.current.windKph)+` km/h`}"
-                        android:textSize="20dp" />
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="20dp"
-                        android:layout_below="@id/tvWindSpeed"
-                        android:id="@+id/tvHumidity"
-                        android:fontFamily="@font/sans"
-                        android:text="@{`Humidity is `+String.valueOf(obj.current.humidity)}"/>
-
-                </RelativeLayout>
-
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                app:cardCornerRadius="10dp"
-                android:backgroundTint="#E8FFE8"
-                android:layout_marginBottom="10dp"
-                android:layout_below="@id/cvWind">
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_toLeftOf="@id/cvTemp"
+                    android:fontFamily="@font/sans"
+                    android:text="@{obj.location.name}"
+                    android:textColor="@color/primary"
+                    android:textSize="30dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:textSize="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toLeftOf="@id/cvTemp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/tvName"
+                    android:textColor="@color/primary"
                     android:fontFamily="@font/sans"
-                    android:text="@{`Pressure is `+obj.current.pressureMb+` Pa`}"/>
+                    android:id="@+id/tvRegion"
+                    android:text="@{obj.location.region+` / `+obj.location.country}"/>
 
-            </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:backgroundTint="#FFD9C0"
+                    android:id="@+id/cvTemp"
+                    android:layout_marginTop="22dp"
+                    app:cardCornerRadius="10dp">
 
-        </RelativeLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/tvTemp"
+                        android:textSize="25dp"
+                        android:layout_margin="10dp"
+                        android:textColor="@color/primary"
+                        android:fontFamily="@font/sans"
+                        android:text="@{String.valueOf(obj.current.tempC)+`\u2103`}"/>
 
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_below="@id/tvRegion"
+                    android:id="@+id/cvWind"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#D5F2FF">
+
+                        <TextView
+                            android:id="@+id/tvWindSpeed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/sans"
+                            android:text="@{`Wind Speed is `+String.valueOf(obj.current.windKph)+` km/h`}"
+                            android:textSize="20dp" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:textSize="20dp"
+                            android:layout_below="@id/tvWindSpeed"
+                            android:id="@+id/tvHumidity"
+                            android:fontFamily="@font/sans"
+                            android:text="@{`Humidity is `+String.valueOf(obj.current.humidity)}"/>
+
+                    </RelativeLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    app:cardCornerRadius="10dp"
+                    android:id="@+id/cvPressure"
+                    android:backgroundTint="#E8FFE8"
+                    android:layout_marginBottom="10dp"
+                    android:layout_below="@id/cvWind">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:textSize="20dp"
+                        android:fontFamily="@font/sans"
+                        android:text="@{`Pressure is `+obj.current.pressureMb+` Pa`}"/>
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/tvQuality"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cvPressure"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/sans"
+                    android:gravity="end"
+                    android:text="Show Air Quality ->"
+                    android:textColor="@color/primary"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/tvForecast"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvQuality"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_toRightOf="@id/cbFav"
+                    android:fontFamily="@font/sans"
+                    android:gravity="end"
+                    android:text="Show Forecast ->"
+                    android:textColor="@color/primary"
+                    android:textSize="20dp" />
+
+                <CheckBox
+                    android:id="@+id/cbFav"
+                    android:layout_width="28dp"
+                    android:layout_height="29dp"
+                    android:layout_below="@id/tvQuality"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/fav_selector"
+                    android:button="@null"
+                    android:drawablePadding="10dp" />
+
+
+            </RelativeLayout>
     </androidx.cardview.widget.CardView>
+
 </layout>

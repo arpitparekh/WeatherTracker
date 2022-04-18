@@ -9,14 +9,39 @@
     tools:context=".HomeActivity">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cvProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="#FFEBDE"
+        app:cardCornerRadius="10dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_user" />
+
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/cvLogin"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        app:cardCornerRadius="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@id/cvProfile"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
-        android:backgroundTint="#FFEBDE">
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#FFEBDE"
+        app:cardCornerRadius="10dp">
 
         <TextView
             android:id="@+id/tvLogin"
@@ -84,16 +109,14 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/secondary"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginEnd="20dp"
-        app:tint="@color/primary"
-        app:rippleColor="@color/primary"
+        android:backgroundTint="@color/secondary"
+        android:src="@drawable/ic_add"
         app:borderWidth="0dp"
-        android:src="@drawable/ic_add"/>
-
-
+        app:rippleColor="@color/primary"
+        app:tint="@color/primary" />
 
 </RelativeLayout>

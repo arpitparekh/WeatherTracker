@@ -6,25 +6,30 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_icon"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_icon_round"
         android:supportsRtl="true"
-        android:requestLegacyExternalStorage="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.WeatherTracker"
+        android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity
+            android:name=".air_quality.AirQualityActivity"
+            android:exported="false"
+            android:theme="@style/MyTheme"/>
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false"
+            android:theme="@style/MyTheme"/>
 
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDDJykH9ph1F19wUM3tJ7JeX1t9e34NZZk"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDDJykH9ph1F19wUM3tJ7JeX1t9e34NZZk" />
 
         <activity
             android:name=".HomeActivity"

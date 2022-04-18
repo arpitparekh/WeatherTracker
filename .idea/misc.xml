@@ -3,18 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/air_quality_row_item.xml" value="0.25" />
         <entry key="app/src/main/res/drawable/edittext_border.xml" value="0.187" />
+        <entry key="app/src/main/res/drawable/fav_selector.xml" value="0.25" />
         <entry key="app/src/main/res/drawable/ic_add.xml" value="0.187" />
         <entry key="app/src/main/res/drawable/ic_login.xml" value="0.187" />
         <entry key="app/src/main/res/drawable/ic_name.xml" value="0.187" />
+        <entry key="app/src/main/res/layout/activity_air_quality.xml" value="0.264" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.264" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="app/src/main/res/layout/activity_maps.xml" value="0.2604166666666667" />
         <entry key="app/src/main/res/layout/activity_my_github.xml" value="0.2604166666666667" />
-        <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.2604166666666667" />
+        <entry key="app/src/main/res/layout/activity_profile.xml" value="0.26145833333333335" />
+        <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
+        <entry key="app/src/main/res/layout/air_quality_row_item.xml" value="0.264" />
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_my_map.xml" value="0.2604166666666667" />
-        <entry key="app/src/main/res/layout/weather_row_item.xml" value="0.264" />
+        <entry key="app/src/main/res/layout/weather_row_item.xml" value="0.4" />
         <entry key="app/src/main/res/xml/network_security_config.xml" value="0.26145833333333335" />
       </map>
     </option>

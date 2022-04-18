@@ -8,19 +8,31 @@
     android:padding="30dp"
     tools:context=".authentication.SignUpActivity">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvProfile_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
-        android:src="@drawable/ic_add" />
+        android:backgroundTint="#FFEBDE"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="10dp">
+
+        <ImageView
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:id="@+id/ivProfile_image"
+            android:layout_height="match_parent"
+            android:src="@drawable/add_photo"/>
+
+    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvRegister"
         android:layout_width="170dp"
+        app:cardCornerRadius="10dp"
         android:layout_height="40dp"
-        android:layout_below="@id/profile_image"
+        android:layout_below="@id/cvProfile_image"
         android:layout_centerInParent="true"
         android:layout_marginTop="20dp"
         android:backgroundTint="#FFEBDE">

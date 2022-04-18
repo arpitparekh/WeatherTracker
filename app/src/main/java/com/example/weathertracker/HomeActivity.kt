@@ -1,15 +1,31 @@
 package com.example.weathertracker
 
 
+
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weathertracker.air_quality.AirQualityActivity
+import com.example.weathertracker.air_quality.TextClickListener
 import com.example.weathertracker.databinding.ActivityHomeBinding
 import com.example.weathertracker.weather.ApiCall
 import com.example.weathertracker.weather.Weather
@@ -19,7 +35,6 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
-import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import com.mapbox.maps.plugin.animation.camera
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -31,9 +46,10 @@ import com.mapbox.navigation.ui.maps.location.NavigationLocationProvider
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.system.exitProcess
 
 
-class HomeActivity : AppCompatActivity(){
+class HomeActivity : AppCompatActivity(),TextClickListener{
 
     lateinit var binding : ActivityHomeBinding
     lateinit var list : ArrayList<Weather>
@@ -42,7 +58,11 @@ class HomeActivity : AppCompatActivity(){
     lateinit var enhancedLocation: Location
     private lateinit var mapboxMap: MapboxMap
     private val navigationLocationProvider = NavigationLocationProvider()
-    private lateinit var mapboxNavigation: MapboxNavigation
+    private var mapboxNavigation: MapboxNavigation? = null
+    lateinit var permission : ActivityResultLauncher<Array<String>>
+    lateinit var again : ActivityResultLauncher<Intent>
+    private var isGranted = false
+    private var name : String? = null
 
     private val locationObserver = object : LocationObserver{
         override fun onNewLocationMatcherResult(locationMatcherResult: LocationMatcherResult) {
@@ -52,8 +72,6 @@ class HomeActivity : AppCompatActivity(){
             navigationLocationProvider.changePosition(enhancedLocation,locationMatcherResult.keyPoints)
 
             updateCamera(enhancedLocation)
-
-
 
         }
 
@@ -74,13 +92,52 @@ class HomeActivity : AppCompatActivity(){
         )
 
     }
-
-
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mapboxMap = binding.mapView.getMapboxMap()
+
+        binding.animation.playAnimation()
+
+        again = registerForActivityResult(ActivityResultContracts.StartActivityForResult(),
+            ActivityResultCallback {
+
+                if ( Build.VERSION.SDK_INT >= 23 &&
+                    ContextCompat.checkSelfPermission( this@HomeActivity, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission( this@HomeActivity, android.Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    initNavigation()
+                }else{
+
+                    Toast.makeText(this@HomeActivity,"Please Give Location Permission\nUnder Permission Section",Toast.LENGTH_SHORT).show()
+                    exitProcess(0)
+                }
+
+            })
+
+        permission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions(),
+            ActivityResultCallback {
+                val fineLocationGranted: Boolean? = it.getOrDefault(
+                    Manifest.permission.ACCESS_FINE_LOCATION, false
+                )
+                val coarseLocationGranted: Boolean? = it.getOrDefault(
+                    Manifest.permission.ACCESS_COARSE_LOCATION, false
+                )
+                if (fineLocationGranted != null && fineLocationGranted) {
+
+                    initNavigation()
+
+                } else if (coarseLocationGranted != null && coarseLocationGranted) {
+
+                    initNavigation()
+
+                } else {
+
+                   openIntent()
+
+                }
+            })
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
@@ -100,13 +157,17 @@ class HomeActivity : AppCompatActivity(){
 
         binding.rvWeatherList.layoutManager = LinearLayoutManager(this)
 
-        adapter = WeatherAdapter(list)
+        adapter = WeatherAdapter(list,this)
 
         binding.rvWeatherList.adapter =adapter
 
         api = WeatherDatabase.getInstance()!!
 
         initialization()
+
+        binding.cvProfile.setOnClickListener {
+
+        }
 
     }
 
@@ -117,17 +178,25 @@ class HomeActivity : AppCompatActivity(){
 
     }
 
+
     @SuppressLint("MissingPermission")
     private fun initNavigation() {
 
+        if (ActivityCompat.checkSelfPermission(this@HomeActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this@HomeActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+
+        }else{
             mapboxNavigation = MapboxNavigation(
                 NavigationOptions.Builder(this)
                     .accessToken(getString(R.string.mapbox_access_token))
                     .build()
             ).apply {
-                startTripSession()
+
+                startTripSession(withForegroundService = false)
                 registerLocationObserver(locationObserver)
+
             }
+        }
 
     }
 
@@ -144,6 +213,13 @@ class HomeActivity : AppCompatActivity(){
                 list.clear()
                 val weather = response.body()
 
+                if(binding.animation.isAnimating){
+
+                    binding.animation.clearAnimation()
+                    binding.animation.visibility = View.GONE
+
+                }
+
                 if (weather != null) {
 
                     binding.animation.clearAnimation()
@@ -151,6 +227,8 @@ class HomeActivity : AppCompatActivity(){
                     binding.tvLoding.visibility = View.GONE
 
                     list.add(weather)
+
+                    name = weather.location?.name!!
 
                     adapter.notifyDataSetChanged()
                 }
@@ -178,6 +256,7 @@ class HomeActivity : AppCompatActivity(){
     @SuppressLint("Lifecycle")
     override fun onStop() {
         super.onStop()
+        mapboxNavigation?.onDestroy()
         binding.mapView.onStop()
     }
 
@@ -187,12 +266,76 @@ class HomeActivity : AppCompatActivity(){
         binding.mapView.onLowMemory()
     }
 
-    @SuppressLint("Lifecycle")
     override fun onDestroy() {
         super.onDestroy()
         binding.mapView.onDestroy()
-        mapboxNavigation.onDestroy()
-//        mapboxNavigation.stopTripSession()
-//        mapboxNavigation.unregisterLocationObserver(locationObserver)
+//        mapboxNavigation?.stopTripSession()
+//        mapboxNavigation?.unregisterLocationObserver(locationObserver)
+
+
+        }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode==1) {
+                val size: Int = permissions.size
+
+                for (i in 0 until size) {
+                    if (permissions[i] == Manifest.permission.ACCESS_FINE_LOCATION
+                        && grantResults[i] == PackageManager.PERMISSION_GRANTED
+                    ) {
+
+                        initNavigation()
+                        isGranted = true
+                    }else {
+
+                        showDialog()
+                    }
+                }
+            }
     }
+
+    private fun showDialog(){
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Application Permission Needed")
+            builder.setMessage("Without Location Permission Current Weather Will not Work")
+            builder.setPositiveButton("Give Permission") { dialogInterface, which ->
+
+                permission.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION))
+            }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+
+        }
+
+    }
+
+    private fun openIntent(){
+
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", packageName, null)
+        intent.data = uri
+        again.launch(intent)
+
+    }
+
+    override fun onAirQualityClick(position: Int) {
+
+        val i = Intent(this,AirQualityActivity::class.java)
+        i.putExtra("lat",enhancedLocation.latitude)
+        i.putExtra("long",enhancedLocation.longitude)
+        i.putExtra("name",name)
+        startActivity(i)
+    }
+
 }
