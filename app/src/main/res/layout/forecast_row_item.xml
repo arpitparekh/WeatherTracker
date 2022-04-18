@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="obj"
+            type="com.example.weathertracker.air_quality.HourItem" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="10dp"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFD9C0">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#D5F2FF"
+                android:layout_marginStart="5dp"
+                android:layout_alignParentStart="true"
+                android:id="@+id/cvTime"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="10dp"
+                app:cardUseCompatPadding="true"
+                android:layout_centerInParent="true"
+                android:layout_alignParentTop="true"
+                app:cardCornerRadius="10dp">
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sans"
+                    android:layout_margin="8dp"
+                    android:text="@{obj.time}"
+                    android:textSize="20dp" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#C7FFC7"
+                android:layout_marginStart="5dp"
+                android:id="@+id/cvTemp"
+                android:layout_below="@id/cvTime"
+                android:layout_marginEnd="5dp"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="10dp">
+
+                <TextView
+                    android:id="@+id/tvTemp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cvTime"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/sans"
+                    android:text="@{String.valueOf(obj.tempC)+` \u2103`}"
+                    android:textSize="30dp" />
+
+            </androidx.cardview.widget.CardView>
+
+
+
+            <TextView
+                android:id="@+id/tvWind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cvTemp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/sans"
+                android:text="@{`Wind Speed : \n`+String.valueOf(obj.windKph)+` km/h`}"
+                android:textColor="@color/primary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/tvHumidity"
+                android:text="@{`Humidity is : \n`+ String.valueOf(obj.humidity)}"
+                android:layout_below="@id/tvWind"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/sans"
+                android:textColor="@color/primary"
+                android:layout_marginBottom="10dp"/>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

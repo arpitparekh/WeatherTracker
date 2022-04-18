@@ -25,8 +25,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weathertracker.air_quality.AirQualityActivity
-import com.example.weathertracker.air_quality.TextClickListener
+import com.example.weathertracker.weather.TextClickListener
 import com.example.weathertracker.databinding.ActivityHomeBinding
+import com.example.weathertracker.forecast.ForecastActivity
 import com.example.weathertracker.weather.ApiCall
 import com.example.weathertracker.weather.Weather
 import com.example.weathertracker.weather.WeatherAdapter
@@ -49,7 +50,7 @@ import retrofit2.Response
 import kotlin.system.exitProcess
 
 
-class HomeActivity : AppCompatActivity(),TextClickListener{
+class HomeActivity : AppCompatActivity(), TextClickListener {
 
     lateinit var binding : ActivityHomeBinding
     lateinit var list : ArrayList<Weather>
@@ -332,6 +333,14 @@ class HomeActivity : AppCompatActivity(),TextClickListener{
     override fun onAirQualityClick(position: Int) {
 
         val i = Intent(this,AirQualityActivity::class.java)
+        i.putExtra("lat",enhancedLocation.latitude)
+        i.putExtra("long",enhancedLocation.longitude)
+        i.putExtra("name",name)
+        startActivity(i)
+    }
+
+    override fun onForecastClick(position: Int) {
+        val i = Intent(this,ForecastActivity::class.java)
         i.putExtra("lat",enhancedLocation.latitude)
         i.putExtra("long",enhancedLocation.longitude)
         i.putExtra("name",name)

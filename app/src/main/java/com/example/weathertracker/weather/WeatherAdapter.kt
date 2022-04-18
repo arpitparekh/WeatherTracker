@@ -3,7 +3,6 @@ package com.example.weathertracker.weather
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weathertracker.air_quality.TextClickListener
 import com.example.weathertracker.databinding.WeatherRowItemBinding
 
 class WeatherAdapter(val list : ArrayList<Weather>, private val listener: TextClickListener) : RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
@@ -25,9 +24,10 @@ class WeatherAdapter(val list : ArrayList<Weather>, private val listener: TextCl
         holder.binding.obj = weather
 
         holder.binding.tvQuality.setOnClickListener {
-
             listener.onAirQualityClick(position)
-
+        }
+        holder.binding.tvForecast.setOnClickListener {
+            listener.onForecastClick(position)
         }
     }
 

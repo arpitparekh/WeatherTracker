@@ -106,17 +106,20 @@
         android:text="Finding Your Location..."
         android:textColor="@color/primary" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
         android:backgroundTint="@color/secondary"
-        android:src="@drawable/ic_add"
+        app:icon="@drawable/ic_locatiton"
+        app:iconTint="@color/primary"
         app:borderWidth="0dp"
-        app:rippleColor="@color/primary"
-        app:tint="@color/primary" />
+        android:text="Your Locations"
+        android:textColor="@color/primary"
+        app:fabSize="mini"
+        app:rippleColor="@color/primary"/>
 
 </RelativeLayout>

@@ -22,11 +22,12 @@ class ForecastAdapter(private val list: ArrayList<Forecast>, private val name: S
         val forecast = list[position]
 
         holder.binding.tvCo.text = "Carbon Monoxide : ${(forecast.current?.airQuality?.co).toString().substring(0,5)} μg/m3"
-        holder.binding.tvOzone.text = "Ozone : ${(forecast.current?.airQuality?.o3).toString().substring(0,5)} μg/m3"
-        holder.binding.tvNo.text = "Nitrogen dioxide : ${(forecast.current?.airQuality?.no2).toString().substring(0,5)} μg/m3"
-        holder.binding.tvSulphur.text = "Sulphur dioxide : ${(forecast.current?.airQuality?.so2).toString().substring(0,5)} μg/m3"
-        holder.binding.tvPM25.text = "PM2.5 : ${(forecast.current?.airQuality?.pm25).toString()} μg/m3"
-        holder.binding.tvPM10.text = "PM10 : ${(forecast.current?.airQuality?.pm10).toString()} μg/m3"
+        holder.binding.tvOzone.text = "Ozone : ${(forecast.current?.airQuality?.o3).toString().substring(0,4)} μg/m3"
+        holder.binding.tvNo.text = "Nitrogen dioxide : ${(forecast.current?.airQuality?.no2).toString().substring(0,4)} μg/m3"
+        holder.binding.tvSulphur.text = "Sulphur dioxide : ${(forecast.current?.airQuality?.so2).toString().substring(0,3)} μg/m3"
+        holder.binding.tvPM25.text = "PM2.5 : ${(forecast.current?.airQuality?.pm25).toString().substring(0,4)} μg/m3"
+        holder.binding.tvPM10.text = "PM10 : ${(forecast.current?.airQuality?.pm10).toString().substring(0,4)} μg/m3"
+        holder.binding.tvUv.text = "UV index : ${(forecast.current?.uv).toString()}"
 
         holder.binding.tvName.text = forecast.location?.name
 

@@ -112,29 +112,29 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cvPressure"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/cvWind"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    app:cardCornerRadius="10dp"
-                    android:id="@+id/cvPressure"
-                    android:backgroundTint="#E8FFE8"
                     android:layout_marginBottom="10dp"
-                    android:layout_below="@id/cvWind">
+                    android:backgroundTint="#E8FFE8"
+                    app:cardCornerRadius="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:textSize="20dp"
                         android:fontFamily="@font/sans"
-                        android:text="@{`Pressure is `+obj.current.pressureMb+` Pa`}"/>
+                        android:text="@{`Pressure is `+obj.current.pressureMb+` Pa`}"
+                        android:textSize="20dp" />
 
                 </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/tvQuality"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/cvPressure"
                     android:layout_marginStart="10dp"
@@ -145,20 +145,21 @@
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/sans"
                     android:gravity="end"
+                    android:layout_alignParentEnd="true"
                     android:text="Show Air Quality ->"
                     android:textColor="@color/primary"
                     android:textSize="20dp" />
 
                 <TextView
                     android:id="@+id/tvForecast"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvQuality"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_toRightOf="@id/cbFav"
                     android:fontFamily="@font/sans"
                     android:gravity="end"
                     android:text="Show Forecast ->"

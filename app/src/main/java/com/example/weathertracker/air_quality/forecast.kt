@@ -242,7 +242,7 @@ data class HourItem(
 	val timeEpoch: Int? = null,
 
 	@field:SerializedName("time")
-	val time: String? = null,
+	var time: String? = null,
 
 	@field:SerializedName("chance_of_snow")
 	val chanceOfSnow: Int? = null,

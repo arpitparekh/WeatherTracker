@@ -19,13 +19,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name=".air_quality.AirQualityActivity"
+            android:name=".forecast.ForecastActivity"
             android:exported="false"
             android:theme="@style/MyTheme"/>
         <activity
+            android:name=".air_quality.AirQualityActivity"
+            android:exported="false"
+            android:theme="@style/MyTheme" />
+        <activity
             android:name=".ProfileActivity"
             android:exported="false"
-            android:theme="@style/MyTheme"/>
+            android:theme="@style/MyTheme" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
