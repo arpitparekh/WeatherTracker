@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.weathertracker">
+    package="com.example.weathertracker" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -17,11 +17,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherTracker"
         android:usesCleartextTraffic="true"
-        tools:targetApi="m">
+        tools:targetApi="m" >
+        <activity
+            android:name=".other_location.OtherLocationActivity"
+            android:exported="false"
+            android:theme="@style/MyTheme"/>
         <activity
             android:name=".forecast.ForecastActivity"
             android:exported="false"
-            android:theme="@style/MyTheme"/>
+            android:theme="@style/MyTheme" />
         <activity
             android:name=".air_quality.AirQualityActivity"
             android:exported="false"
@@ -50,7 +54,7 @@
         <activity
             android:name=".authentication.LoginActivity"
             android:exported="true"
-            android:theme="@style/MyTheme">
+            android:theme="@style/MyTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

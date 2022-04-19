@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -28,10 +29,13 @@ import com.example.weathertracker.air_quality.AirQualityActivity
 import com.example.weathertracker.weather.TextClickListener
 import com.example.weathertracker.databinding.ActivityHomeBinding
 import com.example.weathertracker.forecast.ForecastActivity
+import com.example.weathertracker.other_location.OtherLocationActivity
 import com.example.weathertracker.weather.ApiCall
 import com.example.weathertracker.weather.Weather
 import com.example.weathertracker.weather.WeatherAdapter
 import com.example.weathertracker.weather.WeatherDatabase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
@@ -52,25 +56,33 @@ import kotlin.system.exitProcess
 
 class HomeActivity : AppCompatActivity(), TextClickListener {
 
-    lateinit var binding : ActivityHomeBinding
-    lateinit var list : ArrayList<Weather>
-    lateinit var api : ApiCall
+    lateinit var binding: ActivityHomeBinding
+    lateinit var list: ArrayList<Weather>
+    lateinit var api: ApiCall
     lateinit var adapter: WeatherAdapter
     lateinit var enhancedLocation: Location
     private lateinit var mapboxMap: MapboxMap
     private val navigationLocationProvider = NavigationLocationProvider()
     private var mapboxNavigation: MapboxNavigation? = null
-    lateinit var permission : ActivityResultLauncher<Array<String>>
-    lateinit var again : ActivityResultLauncher<Intent>
+    lateinit var permission: ActivityResultLauncher<Array<String>>
+    lateinit var again: ActivityResultLauncher<Intent>
     private var isGranted = false
-    private var name : String? = null
+    private var name: String? = null
 
-    private val locationObserver = object : LocationObserver{
+    lateinit var ref: DatabaseReference
+    lateinit var auth: FirebaseAuth
+
+    private var city: String? = null
+
+    private val locationObserver = object : LocationObserver {
         override fun onNewLocationMatcherResult(locationMatcherResult: LocationMatcherResult) {
 
             enhancedLocation = locationMatcherResult.enhancedLocation
 
-            navigationLocationProvider.changePosition(enhancedLocation,locationMatcherResult.keyPoints)
+            navigationLocationProvider.changePosition(
+                enhancedLocation,
+                locationMatcherResult.keyPoints
+            )
 
             updateCamera(enhancedLocation)
 
@@ -93,6 +105,7 @@ class HomeActivity : AppCompatActivity(), TextClickListener {
         )
 
     }
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,16 +115,30 @@ class HomeActivity : AppCompatActivity(), TextClickListener {
 
         binding.animation.playAnimation()
 
+        auth = FirebaseAuth.getInstance()
+        ref = FirebaseDatabase.getInstance().getReference("FavData").child(auth.currentUser!!.uid)
+
         again = registerForActivityResult(ActivityResultContracts.StartActivityForResult(),
             ActivityResultCallback {
 
-                if ( Build.VERSION.SDK_INT >= 23 &&
-                    ContextCompat.checkSelfPermission( this@HomeActivity, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission( this@HomeActivity, android.Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= 23 &&
+                    ContextCompat.checkSelfPermission(
+                        this@HomeActivity,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(
+                        this@HomeActivity,
+                        android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
                     initNavigation()
-                }else{
+                } else {
 
-                    Toast.makeText(this@HomeActivity,"Please Give Location Permission\nUnder Permission Section",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@HomeActivity,
+                        "Please Give Location Permission\nUnder Permission Section",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     exitProcess(0)
                 }
 
@@ -135,7 +162,7 @@ class HomeActivity : AppCompatActivity(), TextClickListener {
 
                 } else {
 
-                   openIntent()
+                    openIntent()
 
                 }
             })
@@ -158,15 +185,20 @@ class HomeActivity : AppCompatActivity(), TextClickListener {
 
         binding.rvWeatherList.layoutManager = LinearLayoutManager(this)
 
-        adapter = WeatherAdapter(list,this)
+        adapter = WeatherAdapter(list, this)
 
-        binding.rvWeatherList.adapter =adapter
+        binding.rvWeatherList.adapter = adapter
 
         api = WeatherDatabase.getInstance()!!
 
         initialization()
 
         binding.cvProfile.setOnClickListener {
+
+        }
+        binding.fabLocation.setOnClickListener {
+
+            startActivity(Intent(this, OtherLocationActivity::class.java))
 
         }
 
@@ -183,10 +215,18 @@ class HomeActivity : AppCompatActivity(), TextClickListener {
     @SuppressLint("MissingPermission")
     private fun initNavigation() {
 
-        if (ActivityCompat.checkSelfPermission(this@HomeActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this@HomeActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+        if (ActivityCompat.checkSelfPermission(
+                this@HomeActivity,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this@HomeActivity,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
 
-        }else{
+        } else {
             mapboxNavigation = MapboxNavigation(
                 NavigationOptions.Builder(this)
                     .accessToken(getString(R.string.mapbox_access_token))
@@ -212,20 +252,17 @@ class HomeActivity : AppCompatActivity(), TextClickListener {
         call.enqueue(object : Callback<Weather> {
             override fun onResponse(call: Call<Weather>, response: Response<Weather>) {
                 list.clear()
+
                 val weather = response.body()
+                city = weather?.location?.name
 
-                if(binding.animation.isAnimating){
-
-                    binding.animation.clearAnimation()
-                    binding.animation.visibility = View.GONE
-
-                }
-
-                if (weather != null) {
+                if (binding.animation.isAnimating) {
 
                     binding.animation.clearAnimation()
                     binding.animation.visibility = View.GONE
                     binding.tvLoding.visibility = View.GONE
+                }
+                if (weather != null) {
 
                     list.add(weather)
 
@@ -274,7 +311,7 @@ class HomeActivity : AppCompatActivity(), TextClickListener {
 //        mapboxNavigation?.unregisterLocationObserver(locationObserver)
 
 
-        }
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -283,25 +320,25 @@ class HomeActivity : AppCompatActivity(), TextClickListener {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode==1) {
-                val size: Int = permissions.size
+        if (requestCode == 1) {
+            val size: Int = permissions.size
 
-                for (i in 0 until size) {
-                    if (permissions[i] == Manifest.permission.ACCESS_FINE_LOCATION
-                        && grantResults[i] == PackageManager.PERMISSION_GRANTED
-                    ) {
+            for (i in 0 until size) {
+                if (permissions[i] == Manifest.permission.ACCESS_FINE_LOCATION
+                    && grantResults[i] == PackageManager.PERMISSION_GRANTED
+                ) {
 
-                        initNavigation()
-                        isGranted = true
-                    }else {
+                    initNavigation()
+                    isGranted = true
+                } else {
 
-                        showDialog()
-                    }
+                    showDialog()
                 }
             }
+        }
     }
 
-    private fun showDialog(){
+    private fun showDialog() {
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
 
@@ -310,8 +347,12 @@ class HomeActivity : AppCompatActivity(), TextClickListener {
             builder.setMessage("Without Location Permission Current Weather Will not Work")
             builder.setPositiveButton("Give Permission") { dialogInterface, which ->
 
-                permission.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION))
+                permission.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
             }
             val alertDialog: AlertDialog = builder.create()
             alertDialog.setCancelable(false)
@@ -321,7 +362,7 @@ class HomeActivity : AppCompatActivity(), TextClickListener {
 
     }
 
-    private fun openIntent(){
+    private fun openIntent() {
 
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         val uri = Uri.fromParts("package", packageName, null)
@@ -332,19 +373,38 @@ class HomeActivity : AppCompatActivity(), TextClickListener {
 
     override fun onAirQualityClick(position: Int) {
 
-        val i = Intent(this,AirQualityActivity::class.java)
-        i.putExtra("lat",enhancedLocation.latitude)
-        i.putExtra("long",enhancedLocation.longitude)
-        i.putExtra("name",name)
+        val i = Intent(this, AirQualityActivity::class.java)
+        i.putExtra("lat", enhancedLocation.latitude)
+        i.putExtra("long", enhancedLocation.longitude)
+        i.putExtra("name", name)
         startActivity(i)
     }
 
     override fun onForecastClick(position: Int) {
-        val i = Intent(this,ForecastActivity::class.java)
-        i.putExtra("lat",enhancedLocation.latitude)
-        i.putExtra("long",enhancedLocation.longitude)
-        i.putExtra("name",name)
+        val i = Intent(this, ForecastActivity::class.java)
+        i.putExtra("lat", enhancedLocation.latitude)
+        i.putExtra("long", enhancedLocation.longitude)
+        i.putExtra("name", name)
         startActivity(i)
     }
 
+    override fun onFavCheckBoxClick(position: Int, key: String?, cbFav: CheckBox) {
+
+        if (cbFav.isChecked) {
+
+            ref.push().setValue(city).addOnSuccessListener {
+
+                adapter.notifyDataSetChanged()
+
+            }.addOnFailureListener {
+                Log.i("favError", it.toString())
+            }
+
+        } else {
+
+            ref.child(key!!).removeValue()
+            adapter.notifyDataSetChanged()
+        }
+
+    }
 }

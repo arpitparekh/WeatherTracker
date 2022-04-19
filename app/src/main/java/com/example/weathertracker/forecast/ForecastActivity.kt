@@ -3,6 +3,7 @@ package com.example.weathertracker.forecast
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.weathertracker.air_quality.Forecast
 import com.example.weathertracker.air_quality.HourItem
@@ -25,6 +26,8 @@ class ForecastActivity : AppCompatActivity() {
         binding = ActivityForecastBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.animation.playAnimation()
+
         supportActionBar?.hide()
 
         binding.recyclerViewForecast.layoutManager = GridLayoutManager(this,2)
@@ -41,6 +44,9 @@ class ForecastActivity : AppCompatActivity() {
 
         call.enqueue(object : Callback<Forecast>{
             override fun onResponse(call: Call<Forecast>, response: Response<Forecast>) {
+
+                binding.animation.clearAnimation()
+                binding.animation.visibility = View.GONE
 
                 val forecast = response.body()
 

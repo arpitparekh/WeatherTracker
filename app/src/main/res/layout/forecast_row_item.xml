@@ -17,7 +17,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFD9C0">
+            android:background="#FFD6BD">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
                 android:layout_alignParentStart="true"
                 android:id="@+id/cvTime"
                 android:layout_marginEnd="5dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 app:cardUseCompatPadding="true"
                 android:layout_centerInParent="true"
                 android:layout_alignParentTop="true"
@@ -38,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sans"
-                    android:layout_margin="8dp"
+                    android:layout_margin="5dp"
                     android:text="@{obj.time}"
                     android:textSize="20dp" />
 
@@ -60,10 +60,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/cvTime"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/sans"
                     android:text="@{String.valueOf(obj.tempC)+` \u2103`}"
                     android:textSize="30dp" />
@@ -78,8 +78,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cvTemp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
                 android:fontFamily="@font/sans"
                 android:text="@{`Wind Speed : \n`+String.valueOf(obj.windKph)+` km/h`}"
                 android:textColor="@color/primary" />
@@ -88,14 +88,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:id="@+id/tvHumidity"
                 android:text="@{`Humidity is : \n`+ String.valueOf(obj.humidity)}"
                 android:layout_below="@id/tvWind"
                 android:layout_marginEnd="10dp"
                 android:fontFamily="@font/sans"
                 android:textColor="@color/primary"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="5dp"/>
 
         </RelativeLayout>
 

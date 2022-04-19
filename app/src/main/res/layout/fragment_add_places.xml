@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".other_location.FavouritePlacesFragment">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvPlaces"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="#FFEBDE"
+        app:cardCornerRadius="10dp">
+
+        <TextView
+            android:id="@+id/tvPlaces"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/sans"
+            android:text="Your Places"
+            android:textColor="#d2601a"
+            android:textSize="20dp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/ivPlaceHolder"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:src="@drawable/storm"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/sans"
+        android:text="Add Locations"
+        android:textSize="30dp"
+        android:id="@+id/tvAddPlaces"
+        android:textColor="@color/primary"
+        android:layout_centerInParent="true"
+        android:layout_above="@id/ivPlaceHolder"
+        android:gravity="center"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPlaces"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/cvPlaces"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp" />
+
+</RelativeLayout>

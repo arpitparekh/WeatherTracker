@@ -44,7 +44,7 @@ class SignUpActivity : AppCompatActivity() {
             })
 
         auth = FirebaseAuth.getInstance()
-        ref = FirebaseDatabase.getInstance().getReference("UsersData")
+        ref = FirebaseDatabase.getInstance().getReference("UsersData").child("profileData")
 
 
         binding.ivProfileImage.setOnClickListener {

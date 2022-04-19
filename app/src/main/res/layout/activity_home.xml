@@ -33,13 +33,13 @@
         android:id="@+id/cvLogin"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="10dp"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toLeftOf="@id/cvProfile"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toLeftOf="@id/cvProfile"
         android:backgroundTint="#FFEBDE"
         app:cardCornerRadius="10dp">
 
@@ -107,19 +107,18 @@
         android:textColor="@color/primary" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabLocation"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginBottom="5dp"
-        android:backgroundTint="@color/secondary"
-        app:icon="@drawable/ic_locatiton"
-        app:iconTint="@color/primary"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#363636"
+        android:text="Locations"
+        android:textColor="@color/white"
         app:borderWidth="0dp"
-        android:text="Your Locations"
-        android:textColor="@color/primary"
         app:fabSize="mini"
-        app:rippleColor="@color/primary"/>
+        app:rippleColor="@color/primary" />
 
 </RelativeLayout>

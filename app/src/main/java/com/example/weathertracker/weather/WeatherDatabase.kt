@@ -16,6 +16,5 @@ class WeatherDatabase {
 
             return retrofit.create(ApiCall::class.java)
         }
-
     }
 }
